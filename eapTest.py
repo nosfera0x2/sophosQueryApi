@@ -16,9 +16,7 @@ jwt, tenant_id, tenant_type, data_region = oauth_central.Authenticate.auth(clien
 
 
 def eapQuery():
-    #sql_request = open(sql)
-    #sql_data = json.load(sql_request)
-
+  
     requestUrl = f"{data_region}/live-discover/v1/queries/runs"
 
     requestHeaders = {
@@ -56,7 +54,7 @@ def getQueryResult(id):
     time.sleep(45)
 
     requestUrl = f"{data_region}/live-discover/v1/queries/runs/{id}/results?maxSize=1000"
-    #print(requestUrl)
+  
     requestHeaders = {
 
 
@@ -67,13 +65,9 @@ def getQueryResult(id):
             }
     r = requests.get(requestUrl, headers=requestHeaders)
 
-    #print(r.json())
     jsonResult = r.json()
     return jsonResult["items"]
-    #json.dumps() returns a str
-    #json.loads() returns a dict 
-def check_value(data,val):
-    return any(item['items']['data']==val for item in data['items']['data'])
+
 
 if __name__ == '__main__':
 
