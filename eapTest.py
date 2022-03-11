@@ -69,14 +69,33 @@ def getQueryResult(id):
     return jsonResult["items"]
 
 
+def eapSuccessEmail():
+
+   config = configparser.ConfigParser()
+   config.read('config.ini')
+   mail_id = config['microsoft365']['client_id']
+   mail_secret = config['microsoft365']['client_secret']
+   credentials = (mail_id, mail_secret)
+   mail_tenant_id = config['microsoft365']['tenant_id']
+   account = Account(credentials, auth_flow_type='credentials', tenant_id=mail_tenant_id)
+   account.authenticate()
+   mail = account.new_message(resource='emailsendingfrom@email.domain')
+   mail.to.add('emailsendingto@email.domain')
+   mail.subject = 'EAP Email Test'
+   mail.body = "This email is to infrom that device(s) in Early Access Program"
+   mail.send()
+
 if __name__ == '__main__':
 
    id = eapQuery()
-   time.sleep(10)
-   queryResult = getQueryResult(id)
+   time.sleep(30)
+   queryResult = getQueryResult(id) #looking at jsonResult["items"]
+   print(queryResult)
 
    for d in queryResult:
-       if d['data'] == 'BETA':
+       if d['data'] == 'BETA': #for each dictionary in items, look at 'data' key
            print("Device(s) in EAP")
+           eapSuccessEmail()
            break
+   
  
